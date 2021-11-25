@@ -49,23 +49,26 @@ $(function (){
 
 
 
-    $('.r-radio').click(function (){
-        let id = $(this).attr('id');
-        $('.r-radio').prop('checked',false)
-        $('#'+id).prop('checked',true)
-    });
+
 
 
     function checkR(){
-        if ($('.r-radio').is(':checked')) {
-            $('.rbox-label').removeClass('box-error');
-            console.log('true');
+
+
+
+        if ($('.r-radio').is(':checked')){
+            if ($('#1').is(':checked')) numValueR= $('#1').val();
+            if ($('#2').is(':checked')) numValueR= $('#2').val();
+            if ($('#3').is(':checked')) numValueR= $('#3').val();
+            if ($('#4').is(':checked')) numValueR= $('#4').val();
+            if ($('#5').is(':checked')) numValueR= $('#5').val();
+            $('.rbox-label').removeClass('radio-error')
             return true;
         } else {
-            $('.rbox-label').addClass('box-error');
-            console.log('false');
-            return true;
+            $('.rbox-label').addClass('radiox-error')
+            return false;
         }
+
     }
 
     $('#input-form').on('submit', function(event){
@@ -77,8 +80,8 @@ $(function (){
             dataType: 'json',
             data: {
                 x: numValueX,
-                r: numValueR,
                 y: numValueY,
+                r: numValueR,
                 time: new Date().getTimezoneOffset()
             },
             beforeSend: function () {
@@ -106,7 +109,7 @@ $(function (){
         numValueR = undefined;
         $('#y-textinput').removeClass('text-error')
         $('.x-buttons input').removeClass('button-error')
-        $('.rbox-label').removeClass('checkbox-error')
+        $('.rbox-label').removeClass('radio-error')
         $('.x-buttons input').removeClass('button-clicked')
     });
 
