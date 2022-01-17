@@ -1,0 +1,5 @@
+beans\Entry.class
+servlets\ClearTableServlet.class
+servlets\ControllerServlet.class
+beans\EntriesBean.class
+servlets\AreaCheckServlet.class
