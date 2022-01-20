@@ -1,4 +1,3 @@
-var points = [];
 $(function (){
 
     const X_VALUES = [-5,-4,-3,-2,-1,0,1,2,3];
@@ -63,6 +62,7 @@ $(function (){
         $('.r-buttons input').removeClass('button-clicked')
         $(this).addClass('button-clicked')
         drawFromForm();
+
     });
 
     $('.x-radio').click(function (){
@@ -93,9 +93,6 @@ $(function (){
     canvas.on('click',function (event){
         if (!checkR()) return;
 
-        points.push({'x': event.layerX, 'y': event.layerY, 'r': numValueR });
-
-
         let svgGraph = document.querySelector('.graph').getSVGDocument();
 
         let halfCanvas = $('#canvas').attr("width")/2;
@@ -118,12 +115,12 @@ $(function (){
             }
         }
 
-        printPoints();
+        drawPoint(xCanvasValue/numValueR*doubleDivisionRange+halfCanvas, -(numValueY/numValueR*doubleDivisionRange-halfCanvas));
 
 
         $("#y-textinput").removeClass('text-error');
         $('.r-buttons input').removeClass('button-error');
-
+        $('.xbox-label').removeClass('radio-error')
 
 
         $("#y-textinput").val(numValueY.toString().substring(0,10));
@@ -156,6 +153,10 @@ $(function (){
                 $('#x-radio9').prop('checked',true);
                 break;
         }
+        let simulatedMouseClick = document.createEvent("MouseEvent");
+        let button = document.querySelector('#submit-button');
+        simulatedMouseClick.initMouseEvent("click",false,false,document.defaultView,0,0,0,0,0,false,false,false,false,0,button);
+        button.dispatchEvent(simulatedMouseClick);
     });
 
     function drawFromForm(){
@@ -178,14 +179,6 @@ $(function (){
         }
     }
 
-    function printPoints() {
-        let pointsHTML = "";
-        for (let k = 0; k < points.length; k++) {
-            pointsHTML = pointsHTML + "<circle r=\"3\" cx=\"" + (((points[k].x - 110) * numValueR / points[k].r) + 110) + "\" cy=\"" + (((points[k].y - 110) * numValueR / points[k].r) + 110) + "\" fill-opacity=\"1\" fill=\"#2c2544\" stroke=\"black\" visibility=\"visible\"></circle>"
-        }
-        document.querySelector('svg[class="points"]').innerHTML = pointsHTML;
-    }
-
     function drawPoint(x,y) {
         clearCanvas();
         let ctx = canvas[0].getContext("2d");
@@ -203,19 +196,18 @@ $(function (){
     $('#y-textinput').on('input', () =>{drawFromForm()});
 
 
-
-    $('#submit-button').on('click', function(event){
-
+    function addNewLine(event) {
         if(!(checkX() && checkY() && checkR())) {
             event.preventDefault();
         } else{
             $('.hidden_r').val(numValueR.toString());
             $('.hidden_timezone').val(new Date().getTimezoneOffset());
         }
-    });
+    }
+    $('#submit-button').on('click', addNewLine);
 
 
-    $('#reset-button').on('click', function(event){
+    $('#reset-button').on('click', () => {
         numValueX = undefined;
         numValueY = undefined;
         numValueR = undefined;
